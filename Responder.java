@@ -104,10 +104,6 @@ public class Responder
             System.err.println("A problem was encountered reading " +
                                FILE_OF_MAPPED_RESPONSES);
         }
-        for(String response: responseMap.keySet()){
-            String key = response;
-            System.out.println("\n" + key + ": " + responseMap.get(response));
-        }
     }
 
     /**
