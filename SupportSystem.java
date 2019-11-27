@@ -1,4 +1,8 @@
 import java.util.HashSet;
+import java.io.*;
+import java.nio.file.*;
+import java.net.URL;
+import java.net.URISyntaxException;
 
 /**
  * This class implements a technical support system.
@@ -25,6 +29,7 @@ public class SupportSystem
     public SupportSystem()
     {
         reader = new InputReader();
+        //reader = readFromFile("Techsupport.bin");
         responder = new Responder();
     }
 
@@ -70,5 +75,48 @@ public class SupportSystem
     private void printGoodbye()
     {
         System.out.println("Nice talking to you. Bye...");
+    }
+    
+    /**
+     * Save a binary version of the inputReader to the given file.
+     * If the file name is not an absolute path, then it is assumed
+     * to be relative to the current project folder.
+     * @param destinationFile The file where the details are to be saved.
+     * @throws IOException If the saving process fails for any reason.
+     */
+    public void saveToFile(String destinationFile) throws IOException
+    {
+        Path destination = Paths.get(destinationFile).toAbsolutePath();
+        ObjectOutputStream os = new ObjectOutputStream(
+                                    new FileOutputStream(destination.toString()));
+        os.writeObject(reader);
+        os.close();
+    }
+    
+    /**
+     * Read the binary version of the InputReader from the given file.
+     * If the file name is not an absolute path, then it is assumed
+     * to be relative to the current project folder.
+     * @param sourceFile The file from where the details are to be read.
+     * @return The address book object.
+     * @throws IOException If the reading process fails for any reason.
+     */
+    public InputReader readFromFile(String sourceFile) throws IOException, ClassNotFoundException
+    {
+        URL resource = getClass().getResource(sourceFile);
+        if(resource == null) {
+            throw new FileNotFoundException(sourceFile);
+        }
+        try {
+            File source = new File(resource.toURI());
+            ObjectInputStream is = new ObjectInputStream(
+                                        new FileInputStream(source));
+            InputReader savedReader = (InputReader) is.readObject();
+            is.close();
+            return savedReader;
+        }
+        catch(URISyntaxException e) {
+            throw new IOException("Unable to make a valid filename for " + sourceFile);
+        }
     }
 }

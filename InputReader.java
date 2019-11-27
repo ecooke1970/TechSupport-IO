@@ -1,5 +1,6 @@
 import java.util.HashSet;
 import java.util.Scanner;
+import java.io.Serializable;
 
 /**
  * InputReader reads typed text input from the standard text terminal. 
@@ -9,9 +10,9 @@ import java.util.Scanner;
  * @author David J. Barnes and Michael Kölling.
  * @version 2016.02.29
  */
-public class InputReader
+public class InputReader implements Serializable
 {
-    private Scanner reader;
+    private transient Scanner reader;
 
     /**
      * Create a new InputReader that reads text from the text terminal.
